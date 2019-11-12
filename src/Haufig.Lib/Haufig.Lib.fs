@@ -15,6 +15,10 @@ let (<=~) a b = System.String.Compare(a, b, StringComparison.OrdinalIgnoreCase) 
 let (>~) a b  = System.String.Compare(a, b, StringComparison.OrdinalIgnoreCase) > 0
 let (>=~) a b = System.String.Compare(a, b, StringComparison.OrdinalIgnoreCase) >= 0
 
+type Tag = {id:string; desc:string}
+type Pos = {id:string; desc:string}
+type Token = {text:string; lemma:string; pos:Pos; tag:Tag; shape:string; isPunct:bool; isSpace:bool}
+
 let getHtmlDoc html =
     let doc = HtmlDocument()
     doc.LoadHtml(html)
@@ -31,8 +35,25 @@ let getLemmas model bookText =
 
     new PyIter(doc)
     |> Seq.cast<PyObject>
-    |> Seq.filter (fun t -> (((t?is_punct).ToString() = "False") && ((t?is_space).ToString() = "False")))
-    |> Seq.map (fun t -> ((t?lemma_).ToString()) )
+    |> Seq.map(fun pt -> {
+        text=(pt?text).ToString();
+        lemma=(pt?lemma_).ToString();
+        // TODO: set part of speech and tag descriptions using spacy/glossary.py
+        pos={
+            id=(pt?pos_).ToString();
+            desc="this is a part of speech"};
+        tag={
+            id=(pt?tag_).ToString();
+            desc="this is a tag"};
+        shape=(pt?shape_).ToString();
+        isPunct=((pt?is_punct).ToString() = "True");
+        isSpace=((pt?is_space).ToString() = "True")}
+     )
+    // "FM" -> "foreign language material"
+    // "PROPN" -> Proper Nouns
+    // See: spacy/glossary.py
+    |> Seq.filter (fun t -> not t.isPunct && not t.isSpace && not (List.contains t.pos.id ["PROPN"; "FM"]))
+    |> Seq.map (fun t -> t.lemma)
 
 let countStrings strings =
     printfn "Analyzing lemma frequency..."
