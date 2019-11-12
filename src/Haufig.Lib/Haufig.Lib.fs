@@ -25,6 +25,7 @@ let getLemmas model bookText =
     use gil = Py.GIL()
     let spacy = Py.Import("spacy")
     let nlp = spacy?load(model)
+    printfn "Analyzing text..."
     // equivalent of nlp(bookText) in python
     let doc:PyObject = nlp?__call__(bookText)
 
@@ -34,6 +35,7 @@ let getLemmas model bookText =
     |> Seq.map (fun t -> ((t?lemma_).ToString()) )
 
 let countStrings strings =
+    printfn "Analyzing lemma frequency..."
     strings
     |> Seq.map (fun (s:string) -> s.ToLower())
     |> Seq.fold (fun (dict:Collections.Generic.Dictionary<string, int>) (s:string) ->
@@ -46,11 +48,11 @@ let countStrings strings =
 
 // poor man's attempt to extract raw text from the full epub markup
 let getText (book:EpubBook) =
+    printfn "Extracting text content of %s..." book.Title
     book.ReadingOrder
-    |> Seq.map (fun s -> getHtmlDoc s.Content)
-    |> Seq.map (fun h -> h.DocumentNode.SelectSingleNode("//body").SelectNodes("//text()"))
-    |> Seq.collect (fun ns -> ns)
-    |> Seq.filter (fun n ->  not (n.ParentNode.Name = "script" || n.ParentNode.Name = "style" || String.IsNullOrWhiteSpace(n.InnerText)) )
+    |> Seq.map ((fun s -> getHtmlDoc s.Content) >> (fun h -> h.DocumentNode.SelectSingleNode("//body").SelectNodes("//text()")) )
+    |> Seq.collect (id)
+    |> Seq.filter (fun n -> not (n.ParentNode.Name = "script" || n.ParentNode.Name = "style" || String.IsNullOrWhiteSpace(n.InnerText)) )
     |> Seq.fold (fun (acc:Text.StringBuilder) (n:HtmlNode) -> acc.AppendLine (n.InnerText) ) (Text.StringBuilder())
     |> (fun sb -> sb.ToString())
 

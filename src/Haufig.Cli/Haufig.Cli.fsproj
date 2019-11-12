@@ -13,4 +13,9 @@
     <Compile Include="Haufig.Cli.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Argu" Version="5.5.0" />
+    <PackageReference Include="FSharpPlus" Version="1.1.0-CI00272" />
+  </ItemGroup>
+
 </Project>
