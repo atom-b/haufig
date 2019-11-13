@@ -13,17 +13,17 @@ Quick-and-dirty tool to generate a lemmatized vocabulary frequency list from an 
 ##### From a repository clone:
     dotnet run --project .\src\Haufig.Cli\Haufig.Cli.fsproj --books [<book>...] [--model <model>] [--output-dir <path>] [--book-csvs]
 
-OPTIONS:
+    OPTIONS:
 
-    --books [<book>...]   Space-separated list of .epub files
-    --model <model>       Name of the spaCy language model to use
-    --output-dir <path>   Directory where the output CSV(s) will be written
-    --book-csvs           Output individual CSVs for each book in addition to the merged output CSV
-    --help                display this list of options.
+        --books [<book>...]   Space-separated list of .epub files and/or directories to search for .epub files
+        --model <model>       Name of the spaCy language model to use
+        --output-dir <path>   Directory where the output CSV(s) will be written
+        --book-csvs           Output individual CSVs for each book in addition to the merged output CSV
+        --help                display this list of options.
 
 ##### Example:
 
-    $> dotnet run --project .\src\Haufig.Cli\Haufig.Cli.fsproj --books "C:\Der Tor und der Tod.epub" "C:\Sidsel Langröckchen.epub" --output-dir "outputs/gutenberg/de" --model de_pytt_bertbasecased_lg
+    $> dotnet run --project .\src\Haufig.Cli\Haufig.Cli.fsproj --books "C:\Der Tor und der Tod.epub" "C:\Sidsel Langröckchen.epub" "C:\ebooks\de" --output-dir "outputs/gutenberg/de" --model de_pytt_bertbasecased_lg
 
     $> cat "output/de/gutenberg/results.csv" | more
     der,2598

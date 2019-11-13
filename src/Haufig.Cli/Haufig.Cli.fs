@@ -14,9 +14,23 @@ with
         member s.Usage =
             match s with
             | Model _ -> "Name of the spaCy language model to use"
-            | Books _ -> "Space-separated list of .epub files"
+            | Books _ -> "Space-separated list of .epub files and/or directories to search for .epub files"
             | Output_Dir _ -> "Directory where the output CSV(s) will be written"
             | Book_CSVs _ -> "Output individual CSVs for each book in addition to the merged output CSV"
+
+let searchDir endings path = 
+    endings
+    |> Seq.collect ( fun e -> IO.Directory.GetFiles(path, e, IO.SearchOption.AllDirectories))
+
+let findFiles patterns paths = 
+    paths
+    |> Seq.map (fun p -> 
+        if (IO.Directory.Exists(p)) then 
+            p |> searchDir patterns
+        else 
+            seq {yield p}
+    )
+    |> Seq.collect id
 
 let processBook model infile = 
     let book = Haufig.Lib.loadBook infile
@@ -47,6 +61,7 @@ let main argv =
 
     let freqList = 
         args.GetResult Books
+        |> findFiles ["*.epub"]
         |> Seq.map (
             (processBook model)
             >> ( fun (book, fl) -> 
