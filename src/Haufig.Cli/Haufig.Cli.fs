@@ -1,6 +1,7 @@
 ﻿module Haufig.Cli
 open System
 open System.Collections.Generic
+open Haufig.Lib
 open FSharpPlus
 open Argu
 
@@ -39,7 +40,11 @@ let processBook model infile =
 
 let writeCSV path items =
     // poor man's CSV output
-    let lines = items |> Seq.map (fun (w:KeyValuePair<string,int>) -> w.Key + "," + w.Value.ToString())
+    let lines = 
+        items
+        |> Seq.map (fun (lc:KeyValuePair<string,LemmaCount>) -> lc.Value.count.ToString() + "," + lc.Value.token.lemma + "," + lc.Value.token.pos.id)
+        |> Seq.append ["count,lemma,part of speech"]
+
     System.IO.File.WriteAllLines (path, lines, Text.Encoding.UTF8)
 
 [<EntryPoint>]
@@ -73,8 +78,8 @@ let main argv =
                 fl |> Seq.map (fun i -> (i.Key, i.Value)) |> dict
             )
         )
-        |> Seq.fold(fun acc bfl -> bfl |> Dict.unionWith (+) acc ) (dict Seq.empty<string * int>)
-        |> Seq.sortByDescending (fun s -> s.Value)
+        |> Seq.fold(fun acc bfl -> bfl |> Dict.unionWith (fun llc rlc -> { id=llc.id; token = llc.token; count = llc.count + rlc.count }) acc ) (dict Seq.empty<string * LemmaCount>)
+        |> Seq.sortByDescending (fun s -> s.Value.count)
     
     printfn "Writing full frequency list to %s" fullCsvPath
     writeCSV fullCsvPath freqList

@@ -18,18 +18,21 @@ let (>=~) a b = System.String.Compare(a, b, StringComparison.OrdinalIgnoreCase) 
 type Tag = {id:string; desc:string}
 type Pos = {id:string; desc:string}
 type Token = {text:string; lemma:string; pos:Pos; tag:Tag; shape:string; isPunct:bool; isSpace:bool}
+type LemmaCount = {id:string; token:Token; count:int}
 
 let getHtmlDoc html =
     let doc = HtmlDocument()
     doc.LoadHtml(html)
     doc
 
-let getLemmas model bookText =
+let getTokens model bookText =
     // initialize spaCy
+    printfn "Initializing python and spaCy..."
     use gil = Py.GIL()
     let spacy = Py.Import("spacy")
     let nlp = spacy?load(model)
     nlp?max_length <- 2000000 // ugly hack to get around text length maximum in spaCy, should just process the text in chunks
+    
     printfn "Analyzing text..."
     // equivalent of nlp(bookText) in python
     let doc:PyObject = nlp?__call__(bookText)
@@ -51,22 +54,17 @@ let getLemmas model bookText =
         isSpace=((pt?is_space).ToString() = "True")}
      )
     // "FM" -> "foreign language material"
-    // "PROPN" -> Proper Nouns
+    // "PROPN" -> proper nouns
+    // "PUNCT" -> punctuation
     // See: spacy/glossary.py
-    |> Seq.filter (fun t -> not t.isPunct && not t.isSpace && not (List.contains t.pos.id ["PROPN"; "FM"]))
-    |> Seq.map (fun t -> t.lemma)
+    |> Seq.filter (fun t -> not t.isPunct && not t.isSpace && not (List.contains t.pos.id ["PROPN"; "FM"; "PUNCT";]))
 
-let countStrings strings =
-    printfn "Analyzing lemma frequency..."
-    strings
-    |> Seq.map (fun (s:string) -> s.ToLower())
-    |> Seq.fold (fun (dict:Collections.Generic.Dictionary<string, int>) (s:string) ->
-        if dict.ContainsKey(s) then
-            dict.[s] <- dict.[s] + 1
-        else
-            dict.Add(s, 1)
-        dict
-        ) (Collections.Generic.Dictionary<string, int>())
+let countLemmas tokens =
+    printfn "Counting lemmas..."
+    tokens
+    |> Seq.groupBy (fun t ->t.lemma.ToLower() + "-" + t.pos.id)
+    |> Seq.map (fun (id,tcs) -> (id, { id=id; token = tcs|> Seq.head; count = tcs |> Seq.length }))
+    |> dict
 
 // poor man's attempt to extract raw text from the full epub markup
 let getText (book:EpubBook) =
@@ -82,9 +80,9 @@ let getText (book:EpubBook) =
 let getFrequencyList (book:EpubBook) (model:string) =
     book
     |> getText
-    |> getLemmas model
-    |> countStrings
-    |> Seq.sortByDescending (fun s -> s.Value)
+    |> getTokens model
+    |> countLemmas
+    |> Seq.sortByDescending (fun s -> s.Value.count)
 
 let loadBook (path:string) =
     EpubReader.ReadBook path

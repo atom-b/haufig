@@ -26,15 +26,15 @@ Quick-and-dirty tool to generate a lemmatized vocabulary frequency list from an 
     $> dotnet run --project .\src\Haufig.Cli\Haufig.Cli.fsproj --books "C:\Der Tor und der Tod.epub" "C:\Sidsel Langröckchen.epub" "C:\ebooks\de" --output-dir "outputs/gutenberg/de" --model de_pytt_bertbasecased_lg
 
     $> cat "output/de/gutenberg/results.csv" | more
-    der,2598
-    ich,2272
-    und,1446
-    sein,779
-    sich,601
-    in,453
-    mein,426
-    zu,406
-    haben,393
+    count,lemma,part of speech
+    2270,ich,PRON
+    2146,der,DET
+    1446,und,CONJ
+    775,sein,AUX
+    553,sich,PRON
+    451,der,PRON
+    441,in,ADP
+    393,haben,AUX
     -- More  --
 
 # Caveats
