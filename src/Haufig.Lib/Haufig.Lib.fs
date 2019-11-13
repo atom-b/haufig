@@ -29,6 +29,7 @@ let getLemmas model bookText =
     use gil = Py.GIL()
     let spacy = Py.Import("spacy")
     let nlp = spacy?load(model)
+    nlp?max_length <- 2000000 // ugly hack to get around text length maximum in spaCy, should just process the text in chunks
     printfn "Analyzing text..."
     // equivalent of nlp(bookText) in python
     let doc:PyObject = nlp?__call__(bookText)
@@ -74,7 +75,8 @@ let getText (book:EpubBook) =
     |> Seq.map ((fun s -> getHtmlDoc s.Content) >> (fun h -> h.DocumentNode.SelectSingleNode("//body").SelectNodes("//text()")) )
     |> Seq.collect (id)
     |> Seq.filter (fun n -> not (n.ParentNode.Name = "script" || n.ParentNode.Name = "style" || String.IsNullOrWhiteSpace(n.InnerText)) )
-    |> Seq.fold (fun (acc:Text.StringBuilder) (n:HtmlNode) -> acc.AppendLine (n.InnerText) ) (Text.StringBuilder())
+    |> Seq.map ((fun n -> n.InnerText) >> HtmlEntity.DeEntitize)
+    |> Seq.fold (fun (acc:Text.StringBuilder) (t:string) -> acc.AppendLine (t)) (Text.StringBuilder())
     |> (fun sb -> sb.ToString())
 
 let getFrequencyList (book:EpubBook) (model:string) =
