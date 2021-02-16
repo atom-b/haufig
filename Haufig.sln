@@ -1,5 +1,4 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
@@ -8,6 +7,8 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Haufig.Lib", "src\Haufig.Lib\Haufig.Lib.fsproj", "{227EB92D-6F89-4A42-8CB0-063D2E651599}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Haufig.Cli", "src\Haufig.Cli\Haufig.Cli.fsproj", "{DB616E67-780F-48AA-A971-21B7D46C3627}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Haufig.WebApi", "src\Haufig.WebApi\Haufig.WebApi.fsproj", "{23C25EAD-E657-4DB6-817A-89C6B2F687FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,9 +59,22 @@ Global
 		{D945DA73-4E80-4E32-BFC3-C5460B84B80A}.Release|x64.Build.0 = DebugMono|Any CPU
 		{D945DA73-4E80-4E32-BFC3-C5460B84B80A}.Release|x86.ActiveCfg = DebugMono|Any CPU
 		{D945DA73-4E80-4E32-BFC3-C5460B84B80A}.Release|x86.Build.0 = DebugMono|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Debug|x64.Build.0 = Debug|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Debug|x86.Build.0 = Debug|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Release|x64.ActiveCfg = Release|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Release|x64.Build.0 = Release|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Release|x86.ActiveCfg = Release|Any CPU
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{227EB92D-6F89-4A42-8CB0-063D2E651599} = {3665C339-ECC7-4AA5-81C9-2505DCF4AF4D}
 		{DB616E67-780F-48AA-A971-21B7D46C3627} = {3665C339-ECC7-4AA5-81C9-2505DCF4AF4D}
+		{23C25EAD-E657-4DB6-817A-89C6B2F687FF} = {3665C339-ECC7-4AA5-81C9-2505DCF4AF4D}
 	EndGlobalSection
 EndGlobal
