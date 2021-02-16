@@ -3,15 +3,28 @@
 
 Quick-and-dirty tool to generate a lemmatized vocabulary frequency list from an EPUB ebook.
 
-# Requirements
+# Setup
+## Docker - Recommended
+
+Using the Docker development container is the most straightforward way to run Haufig until there is a turn-key solution.
+
+1. Clone this repository
+1. Install Visual Studio Code
+1. Follow [Microsoft's installation instructions](https://code.visualstudio.com/docs/remote/containers) to configure VS Code for development within a Docker container.
+1. Start VS Code, then run the `Remote-Containers: Open Folder in Container` command and open the project directory.
+   * For more detailed instructions see the section titled **Quick start: Open an existing folder in a container** in the Microsoft documentation.
+
+## Standalone
+
+You will need: 
 * A clone of this repository
-* A working Python 3.7 install
+* A working Python 3.8 install
 * A [spaCy](https://spacy.io/usage) install with the [language model(s)](https://spacy.io/models) you want to use
-* Ability to build and run [.NET Core 2.0](https://dotnet.microsoft.com/download) projects
+* Ability to build and run [.NET 5.0](https://dotnet.microsoft.com/download) projects
 
 # Usage
-##### From a repository clone:
-    dotnet run --project .\src\Haufig.Cli\Haufig.Cli.fsproj --books [<book>...] [--model <model>] [--output-dir <path>] [--book-csvs]
+##### From within the project directory:
+    dotnet run --project ./src/Haufig.Cli/Haufig.Cli.fsproj --books [<book>...] [--model <model>] [--output-dir <path>] [--book-csvs]
 
     OPTIONS:
 
@@ -21,9 +34,11 @@ Quick-and-dirty tool to generate a lemmatized vocabulary frequency list from an 
         --book-csvs           Output individual CSVs for each book in addition to the merged output CSV
         --help                display this list of options.
 
-##### Example:
+##### Examples:
 
-    $> dotnet run --project .\src\Haufig.Cli\Haufig.Cli.fsproj --books "C:\Der Tor und der Tod.epub" "C:\Sidsel Langröckchen.epub" "C:\ebooks\de" --output-dir "outputs/gutenberg/de" --model de_pytt_bertbasecased_lg
+    $> dotnet run --project ./src/Haufig.Cli/Haufig.Cli.fsproj --books "ebooks/Der Tor und der Tod by Hugo von Hofmannsthal.epub" --output-dir "outputs/gutenberg/de" --model de_core_news_sm
+
+    $> dotnet run --project ./src/Haufig.Cli/Haufig.Cli.fsproj --books "ebooks/Der Tor und der Tod.epub" "ebooks/Sidsel Langröckchen.epub" "ebooks/de" --output-dir "outputs/gutenberg/de" --model de_core_news_sm
 
     $> cat "output/de/gutenberg/results.csv" | more
     count,lemma,part of speech
