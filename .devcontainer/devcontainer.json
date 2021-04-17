@@ -10,8 +10,8 @@
 			"NODE_VERSION": "lts/*",
 			"INSTALL_AZURE_CLI": "false",
 			"UPGRADE_PACKAGES": "false",
-			"SPACY_MODEL": "de_core_news_sm"
-			//"SPACY_MODEL": "de_dep_news_trf" 
+			// "SPACY_MODEL": "de_core_news_sm"
+			"SPACY_MODEL": "de_dep_news_trf" 
 		}
 	},
 

@@ -27,8 +27,4 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 RUN pip3 install setuptools && \
     pip3 install spacy spacy[transformer] && \
-    python3 -m spacy download ${SPACY_MODEL} && \
-    python3 -m spacy download de_dep_news_trf && \
-
-# [Optional] Uncomment this line to install global node packages.
-# RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
+    python3 -m spacy download ${SPACY_MODEL}
