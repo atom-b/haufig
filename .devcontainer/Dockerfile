@@ -17,8 +17,9 @@ COPY settings.vscode.json /root/.vscode-remote/data/Machine/settings.json
 
 # libpython doesn't add itself to ld.so.conf so use env var instead
 ENV LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:/usr/lib/python3.8/config-3.8-x86_64-linux-gnu/
-ARG SPACY_PIPELINE="de_core_news_sm"
-# ARG SPACY_PIPELINE="de_dep_news_trf"
+ARG SPACY_MODEL="de_core_news_sm"
+# de_dep_news_trf is much larger and slower but much more accurate
+# ARG SPACY_MODEL="de_dep_news_trf"
 
 # TODO: do we need python3.8 AND libpython?
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -26,7 +27,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 RUN pip3 install setuptools && \
     pip3 install spacy spacy[transformer] && \
-    python3 -m spacy download ${SPACY_PIPELINE}
+    python3 -m spacy download ${SPACY_MODEL} && \
+    python3 -m spacy download de_dep_news_trf && \
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1

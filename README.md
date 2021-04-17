@@ -9,10 +9,11 @@ Quick-and-dirty tool to generate a lemmatized vocabulary frequency list from an 
 Using the Docker development container is the most straightforward way to run Haufig until there is a turn-key solution.
 
 1. Clone this repository
-1. Install Visual Studio Code
+1. [Install Visual Studio Code](https://code.visualstudio.com)
 1. Follow [Microsoft's installation instructions](https://code.visualstudio.com/docs/remote/containers) to configure VS Code for development within a Docker container.
 1. Start VS Code, then run the `Remote-Containers: Open Folder in Container` command and open the project directory.
    * For more detailed instructions see the section titled **Quick start: Open an existing folder in a container** in the Microsoft documentation.
+1. In `.devcontainer/Dockerfile` change the value of `SPACY_MODEL=<...>` to whatever [spaCy model](https://spacy.io/models) you'd like to use for your language.
 
 ## Standalone
 
