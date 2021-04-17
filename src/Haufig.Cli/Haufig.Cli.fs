@@ -42,8 +42,8 @@ let writeCSV path items =
     // poor man's CSV output
     let lines = 
         items
-        |> Seq.map (fun (lc:KeyValuePair<string,LemmaCount>) -> lc.Value.count.ToString() + "," + lc.Value.token.lemma + "," + lc.Value.token.pos.id)
-        |> Seq.append ["count,lemma,part of speech"]
+        |> Seq.map (fun (lc:KeyValuePair<string,LemmaCount>) -> lc.Value.count.ToString() + "," + lc.Value.token.lemma + "," + lc.Value.token.pos.id + "," + lc.Value.token.tag.id)
+        |> Seq.append ["count,lemma,simple part of speech,detailed part of speech"]
 
     System.IO.File.WriteAllLines (path, lines, Text.Encoding.UTF8)
 
@@ -53,7 +53,7 @@ let main argv =
     if argv.Length <= 0 then printfn "%s" (argParser.PrintUsage()); exit 1;
 
     let args = argParser.Parse argv
-    let model = args.GetResult ( Model, defaultValue = @"de_core_news_md" )//  @"de_pytt_bertbasecased_lg" alternative model
+    let model = args.GetResult ( Model, defaultValue = @"de_core_news_sm" )//  @"de_dep_news_trf" alternative model
 
     let csvOutDir = args.GetResult (Output_Dir, defaultValue = IO.Path.GetFullPath("."))
     let fullCsvPath = IO.Path.Combine(csvOutDir, "results.csv")

@@ -57,11 +57,12 @@ let getTokens model bookText =
     // "PROPN" -> proper nouns
     // "PUNCT" -> punctuation
     // See: spacy/glossary.py
-    |> Seq.filter (fun t -> not t.isPunct && not t.isSpace && not (List.contains t.pos.id ["PROPN"; "FM"; "PUNCT";]))
+    |> Seq.filter (fun t -> not t.isPunct && not t.isSpace && not (List.contains t.pos.id ["PROPN"; "FM"; "PUNCT"; "NUM"]))
 
 let countLemmas tokens =
     printfn "Counting lemmas..."
     tokens
+    // |> Seq.groupBy (fun t ->t.lemma.ToLower() + "-" + t.pos.id + "-" + t.tag.id)
     |> Seq.groupBy (fun t ->t.lemma.ToLower() + "-" + t.pos.id)
     |> Seq.map (fun (id,tcs) -> (id, { id=id; token = tcs|> Seq.head; count = tcs |> Seq.length }))
     |> dict
